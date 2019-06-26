@@ -1,0 +1,83 @@
+import java.util.Scanner;
+
+public class methods {
+
+		public static void main(String[] args) {
+			printYikes();
+			int x = 12, games, num1, num2;
+			
+			System.out.print("Hello user, how many times to play? \n");
+			games = checkInt();
+			for (int count = 0; count < games; count++) {
+
+
+
+				System.out.print("Hey user, ");
+				num1 = checkInt();
+				int y = 54;
+				System.out.println( "x is " + x );
+
+				x = doubleMyNumber(x);
+				System.out.println( "x is " + x  );
+
+				x = tripleMyNumber(x);
+				System.out.println( "x is " + x  );
+
+				System.out.println("the sum is: " + addTwoNumbers(x, y) );
+				
+				System.out.print( "Hey user, eneter a number grade  \n");
+				num2 = checkInt();
+				String finalletter = returnAGrade(num2);
+				System.out.println( "letter grade is " + finalletter  );
+			}
+		}
+
+		static String returnAGrade (int grade) {
+			String letter = "";
+			if (grade > 90) {
+				letter = "A";
+			} else {
+				letter = "B";
+			}	
+			return letter; 
+		}
+
+		static int addTwoNumbers(int first, int sec) {
+			int sum = first + sec;
+			return sum;
+		}
+
+
+		static int tripleMyNumber(int m) {
+			int n = m * 3;
+			return n;
+		}
+		static void printYikes() {
+			System.out.println("Oops!");
+		}
+
+		static int doubleMyNumber(int a) {
+			int b = a * 2;
+			return b;
+		}
+		
+		static int checkInt() {
+			int enteredNumber = 0;
+			boolean numberError = false;
+
+			do {
+				Scanner myScanner = new Scanner(System.in);
+				try {
+					System.out.print("Please enter an integer: ");
+					enteredNumber = myScanner.nextInt();  //read the number from the keyboard
+					numberError = false;  //if we haven't bailed out, then the number must be valid.
+				} catch(Exception e) {
+					System.out.println("The value you provided is invalid...Please try again");
+					numberError = true;  //Uh-Oh...We have a problem.
+	       			}
+			} while (numberError == true );  //Keep asking the user until the correct number is entered.
+			
+			return enteredNumber;
+		}
+}
+
