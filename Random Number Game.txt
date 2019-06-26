@@ -1,0 +1,112 @@
+import java.util.Random;
+import java.util.Scanner;
+
+public class RaNuGa {
+	private static Random rand = new Random();
+    private static Scanner input = new Scanner(System.in);
+    private static boolean quit = false;
+    private static boolean win = false;
+    private static int target;
+    private static int tries;
+    private static int highNum = 0;
+
+	public static void main(String[] args) {
+		
+
+		while (!quit) {
+            playGame();
+        }
+    }
+
+    private static void playGame() {
+
+        System.out.println("Hello user, please enter an integer below.");
+        System.out.println("Enter a high number: ");
+        highNum = checkInt();
+        
+        
+
+        if (highNum > 100) {
+            System.out.println("This is too large of a number, it might take you a while to guess.");
+            System.out.println("Do you still want to continue?");
+            System.out.println("Type 0 for yes, type 1 for no.");
+            int choice = checkInt();
+            if(choice == 0) {
+
+                target = rand.nextInt(highNum);
+                guess(target);
+            } 
+            else {
+                System.out.println("Pick a different number: ");
+                highNum = input.nextInt();
+                target = rand.nextInt(highNum);
+                guess(target);
+            }
+        } else {
+            System.out.println("Guess a number between 0 and " + highNum);
+            target = rand.nextInt(highNum);
+            guess(target);
+        }
+    }
+
+    private static void guess(int randNumber) {
+        int guess = 0;
+        while(!win) {
+            guess = checkInt();
+            if (guess == randNumber) {
+                win = true;
+
+            } else if (guess < randNumber) {
+                System.out.println("Number is to low, try again");
+
+            } else if (guess > randNumber) {
+                System.out.println("Number is to high, try again");
+            }
+            tries++;
+        }
+        playAgainMessage(guess);
+    }
+    
+    private static int checkInt() {
+    	String eString = "";
+    	Scanner userNumber = new Scanner(System.in);
+    	boolean numberError = false;
+    	int x = 0;
+    	
+    	do{
+			try 
+			{
+				System.out.println("Please enter an integer: ");
+				eString = userNumber.next();  
+				x = Integer.parseInt(eString.trim()); 
+				numberError = false; 
+				}
+			catch(Exception e)
+				{
+					System.out.println("Your entry: \"" + eString + "\" is invalid...Please try again");
+					numberError = true;
+					}
+			} while (numberError == true );
+    	
+    	return x;
+    	
+    }
+
+    private static void playAgainMessage(int correctNumber) {
+        System.out.println("You win! The number was " + correctNumber);
+        System.out.println("You got it in " + tries + " tries!");
+        System.out.println("Would you like to play again(yes/no)?");
+        String play = input.next();
+        if (play.equalsIgnoreCase("yes")) {
+            System.out.println("The game will restart.");
+            System.out.flush();
+            win = false;
+            playGame();
+        } else{
+            System.out.println("Game over – Have a nice day!");
+            quit = true;
+        }
+		
+	}
+
+}
