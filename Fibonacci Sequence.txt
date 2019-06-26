@@ -1,0 +1,25 @@
+
+public class Fib_Proj {
+
+	public static void main(String[] args) {
+		// TODO Auto-generated method stub
+
+		int first = 0; 
+		int sec = 1;
+		int total = 0;
+		
+		System.out.print(sec + ", ");
+		
+		while (total < 233 ) {
+			total = first + sec;
+			first = sec;
+			sec = total;
+			
+			System.out.print(total + ", ");
+		}	
+		
+		total = first + sec;
+		System.out.println(total);
+	}
+
+}
