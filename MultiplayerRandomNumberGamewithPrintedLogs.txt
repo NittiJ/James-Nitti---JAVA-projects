@@ -1,0 +1,249 @@
+package assignmenteight;
+
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.Scanner;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+
+
+public class MPRNGwithlogwriter {
+
+	public static void main(String[] args) 
+	{
+		Scanner keyboard = new Scanner(System.in);
+		ArrayList<String> rerun = new ArrayList<String>();
+		ArrayList<String> playerNam = new ArrayList<String>();
+		ArrayList<String> playerLocation = new ArrayList<String>();
+		ArrayList<Integer> playerRand = new ArrayList<Integer>();
+		ArrayList<ArrayList<Integer>> allGuess = new ArrayList<ArrayList<Integer>>();
+
+		String trytrytry = "";
+		int numPlayer = 0;
+		int userIn = 0;
+		int myRand = 0;
+		int count =0;
+		do {
+			
+			count++;
+
+			playerNam.clear();
+			playerRand.clear();
+			playerLocation.clear();
+			allGuess.clear();
+			rerun.clear();
+			
+
+			do {
+				numPlayer = howmanyplayers(
+						"Welcome to the Multiplayer Random Number Guessing Game!");
+				if (numPlayer == 0 || numPlayer < 0) {
+					System.out.println("Invalid entry, please try again, positive integers only.");
+				}
+			} while (numPlayer == 0 || numPlayer < 0);
+
+			String name = "";
+			int i = 0;
+			while (i < numPlayer) {
+				System.out.println("Player " + (i + 1) + " enter your name: ");
+				name = keyboard.next();
+				playerNam.add(name);
+				i++;
+
+			}
+
+			for (int j = 0; j < playerNam.size(); j++) {
+				System.out.println(playerNam.get(j));
+				myRand = randomize(myRand);
+				playerRand.add(myRand);
+				
+
+				ArrayList<Integer> indGuesses = new ArrayList<Integer>();
+				indGuesses.clear();
+				userIn = turns("Guess a number: ");
+
+				if (userIn == playerRand.get(j)) {
+					System.out.println("Correct!");
+					playerLocation.add(playerNam.get(j));
+					indGuesses.add(userIn);
+					allGuess.add(indGuesses);
+
+				} else if (userIn < playerRand.get(j)) {
+
+					System.out.println("Too Low");
+					rerun.add(playerNam.get(j));
+					indGuesses.add(userIn);
+					allGuess.add(indGuesses);
+
+				} else {
+
+					System.out.println("Too High");
+					rerun.add(playerNam.get(j));
+					indGuesses.add(userIn);
+					allGuess.add(indGuesses);
+
+				}
+
+			}
+			System.out.println();
+			for (int k = 0; k < rerun.size(); k++) {
+				System.out.println("Users that need to go again: " + rerun.get(k));
+			}
+			System.out.println();
+			boolean whatever = false;
+			while (!rerun.isEmpty()) {
+
+				for (int t = 0; t < rerun.size(); t++) {
+					
+					System.out.println(rerun.get(t));
+					if (rerun.get(t) == null) {
+						whatever = true;
+						continue;
+					}
+					
+					int x = playerRand.size() - rerun.size();
+				
+					userIn = turns("Guess a number: ");
+
+					if (userIn == playerRand.get(t + x)) {
+					
+						System.out.println("Correct!");
+						playerLocation.add(rerun.get(t));
+						rerun.set(t, null);
+						allGuess.get(t).add(userIn);
+						
+
+						whatever = true;
+
+					} else if (userIn < playerRand.get(t + x)) {
+					
+						System.out.println("Too Low");
+						allGuess.get(t).add(userIn);
+						whatever = false;
+					} else {
+					
+						System.out.println("Too High");
+						allGuess.get(t).add(userIn);
+						whatever = false;
+					}
+				}
+				System.out.println();
+				for (int k = 0; k < rerun.size(); k++) {
+					System.out.println("User guess again: " + rerun.get(k));
+				}
+				if (whatever == true) {
+					break;
+				}
+			}
+			System.out.println();
+			System.out.println("Rankings:");
+			for (int l = 0; l < playerLocation.size(); l++) {
+				System.out.println(
+						(l + 1) + " place: " + playerLocation.get(l) + " " + (allGuess.get(l).size()) + " tries.");
+				System.out.println("Incorrect guesses: " + allGuess.get(l));
+			}
+
+			try {
+
+				String filename = "C:\\Users\\nitti\\Documents\\MPRNGround1" + count + ".txt";
+				File outfile = new File(filename);
+				FileWriter fw = new FileWriter(outfile.getAbsoluteFile());
+				BufferedWriter bw = new BufferedWriter(fw);
+				
+				
+				if (!outfile.exists()) {
+					outfile.createNewFile();
+				}
+				bw.write("This is the LOG file for Round " + count);
+				for (int l = 0; l < playerLocation.size(); l++) {
+					bw.newLine();
+					bw.write((l + 1) + " place: " + playerLocation.get(l) + " " + (allGuess.get(l).size()) + " tries.");
+					bw.newLine();
+					bw.append("Incorrect guesses: " + allGuess.get(l));
+				}
+
+				bw.flush(); 
+				bw.close();
+
+				System.out.println("This round is over!");
+
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+			System.out.println();
+			System.out.println("Would you like to play again? (yes or no)");
+			trytrytry = keyboard.next();
+			if (!trytrytry.equals("yes") && !trytrytry.equals("no")) {
+				while (!trytrytry.equals("yes") && !trytrytry.equals("no")) {
+					System.out.println("Invalid. Try again. (yes or no): ");
+					trytrytry = keyboard.next();
+					if (trytrytry.equals("no")) {
+						System.out.println("Game Over, Have a Nice Day!");
+					}
+				}
+			} else if (trytrytry.equals("no")) {
+				System.out.println("Game Over, Have a Nice Day");
+				
+			}
+		} while (trytrytry
+				.equals("yes"));
+
+	}
+
+	private static int howmanyplayers(String string) {
+		boolean error = false;
+		int enterednum = 0;
+		String enterednumS = "";
+		System.out.println(string);
+		System.out.println();
+		do {
+			try {
+				Scanner keyboard = new Scanner(System.in);
+				System.out.println("How many players are going to play?: ");
+				enterednumS = keyboard.next();
+				enterednum = Integer.parseInt(enterednumS);
+				error = false;
+
+			} catch (Exception e) {
+				System.out.println("Invalid. Please try again: ");
+				error = true;
+			}
+		} while (error == true);
+		return enterednum;
+
+	}
+
+	private static int randomize(int Randomm) {
+		Random randNum = new Random();
+		Randomm = (randNum.nextInt(50));
+		return Randomm;
+	}
+
+	private static int turns(String prompt) {
+		boolean error = false;
+		int enterednum = 0;
+		String enteredNumber = "";
+
+		do {
+			try {
+				Scanner keyboard = new Scanner(System.in);
+				System.out.print(prompt);
+				enteredNumber = keyboard.next();
+				enterednum = Integer.parseInt(enteredNumber);
+				error = false;
+
+			} catch (Exception e) {
+				System.out.println("Invalid. Please try again: ");
+				error = true;
+			}
+		} while (error == true);
+		return enterednum;
+
+
+	}
+
+}
